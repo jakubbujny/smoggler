@@ -8,7 +8,7 @@
             crossorigin="anonymous"></script>
 
     <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
-    <br><br>
+    <br><br><br><br>
     <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
 
 <script>
@@ -45,18 +45,19 @@
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
+                datasets: [
+                    {
+                        label: 'WHO safe limit',
+                        type: "line",
+                        borderColor: 'rgb(255, 0, 0)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                        data: reference25
+                    },
+                    {
                     label: 'PM 2.5',
                     type: "line",
                     backgroundColor: 'rgb(175, 175, 175)',
                     data: pm25
-                },
-                {
-                    label: 'WHO safe limit',
-                    type: "line",
-                    borderColor: 'rgb(255, 0, 0)',
-                    backgroundColor: 'rgba(0, 0, 0, 0.0)',
-                    data: reference25
                 }
                 ]
             },
@@ -73,19 +74,20 @@
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'PM 10',
-                    type: "line",
-                    backgroundColor: 'rgb(175, 175, 175)',
-                    data: pm10
-                },
+                datasets: [
                     {
                         label: 'WHO safe limit',
                         type: "line",
                         borderColor: 'rgb(255, 0, 0)',
                         backgroundColor: 'rgba(0, 0, 0, 0.0)',
                         data: reference10
-                    }
+                    },
+                    {
+                    label: 'PM 10',
+                    type: "line",
+                    backgroundColor: 'rgb(175, 175, 175)',
+                    data: pm10
+                }
                 ]
             },
             options: {

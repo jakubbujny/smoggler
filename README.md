@@ -5,6 +5,13 @@ Project is currently work-in-progress so README info might not be accurate
 Air quality measurement tool based on RPI and SDS011. It exposes website which can be reached
 in LAN to display air quality with historical data.
 
+## Web
+![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/web.jpg?raw=true)
+
+##Mobile
+![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/mobile.jpg?raw=true)
+
+
 All state is stored in mem so power off = historical data lost.
 
 # Requirements
