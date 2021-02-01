@@ -7,8 +7,9 @@
             integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
             crossorigin="anonymous"></script>
 
-    <div style="width: 50%; height: 400px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
-    <div style="width: 50%; height: 400px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
+    <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
+    <br><br>
+    <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
 
 <script>
     function addData(chart, label, data) {
@@ -51,7 +52,7 @@
                     data: pm25
                 },
                 {
-                    label: 'WHO reference',
+                    label: 'WHO safe limit',
                     type: "line",
                     borderColor: 'rgb(255, 0, 0)',
                     backgroundColor: 'rgba(0, 0, 0, 0.0)',
@@ -59,7 +60,14 @@
                 }
                 ]
             },
-            options: {}
+            options: {
+                title: {
+                    display: true,
+                    text: 'PM 2.5 - current value: '+pm25[pm25.length - 1],
+                    fontSize: 16,
+                    fontColor: (pm25[pm25.length - 1] > 25) ? "#F00" : "#000"
+                }
+            }
         });
         var chartPM10 = new Chart(document.getElementById('pm10').getContext('2d'), {
             type: 'line',
@@ -72,7 +80,7 @@
                     data: pm10
                 },
                     {
-                        label: 'WHO reference',
+                        label: 'WHO safe limit',
                         type: "line",
                         borderColor: 'rgb(255, 0, 0)',
                         backgroundColor: 'rgba(0, 0, 0, 0.0)',
@@ -80,7 +88,14 @@
                     }
                 ]
             },
-            options: {}
+            options: {
+                title: {
+                    display: true,
+                    text: 'PM 10 - current value: '+pm10[pm10.length - 1],
+                    fontSize: 16,
+                    fontColor: (pm10[pm10.length - 1] > 50) ? "#F00" : "#000"
+                }
+            }
         });
     });
 

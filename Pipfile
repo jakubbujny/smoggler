@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 pyserial = "*"
 flask = "*"
+pyyaml = "*"
 
 [dev-packages]
 

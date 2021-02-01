@@ -69,7 +69,7 @@ class Sensor(AbstractSensor):
 
             if queue.full():
                 queue.get()
-            self.measurementsQueue.put(Measurement(0, pm25, pm10))
+            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), pm25, pm10))
             time.sleep(minutesToWaitBetweenMeasurements*60)
 
 

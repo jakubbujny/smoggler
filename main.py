@@ -13,7 +13,7 @@ cfg = lib.config.Config("config.yaml")
 
 sensor = None
 queueSize = None
-if os.environ["DEV"] is not None:
+if "DEV" in os.environ:
     queueSize = cfg.config["dev"]["queueSize"]
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
@@ -36,4 +36,4 @@ def root():
     return app.send_static_file('index.html')
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0')
