@@ -1,12 +1,16 @@
 import struct
 import time
+import typing
 
 import serial
+
 
 class InvalidResponseFromDevice(Exception):
     pass
 
-class SDS011():
+
+class SDS011:
+
     CMD_ID = b'\xb4'
     HEAD = b'\xaa'
     TAIL = b'\xab'
@@ -18,8 +22,8 @@ class SDS011():
     ACTIVE = b"\x01"
 
 
-    def __init__(self, serial_port, baudrate=9600, timeout=2):
-        self.serialPort = serial.Serial(port=serial_port, baudrate=baudrate, timeout=timeout)
+    def __init__(self, serial_port: str, baudrate:int=9600, serialPortTimeout:int=2):
+        self.serialPort = serial.Serial(port=serial_port, baudrate=baudrate, timeout=serialPortTimeout)
         self.serialPort.flush()
 
     def getCommandHeader(self):
@@ -34,9 +38,9 @@ class SDS011():
             raise InvalidResponseFromDevice("invalid length")
         return raw
 
-    def queryPM(self, waitingTime=45):
-        self.active()
-        time.sleep(waitingTime)
+    def queryPM(self, waitingTimeForMeasurement:int=60) -> typing.Tuple[float,float]:
+        self.activate()
+        time.sleep(waitingTimeForMeasurement)
         cmd = self.HEAD + self.CMD_ID
         cmd += (self.QUERY_CMD
                 + b"\x00" * 12)
@@ -63,7 +67,7 @@ class SDS011():
         self.serialPort.write(cmd)
         self._getReplyFromDevice()
 
-    def active(self):
+    def activate(self):
         cmd = self.getCommandHeader()
         cmd += (self.SLEEP_CMD
                 + b"\x01"
