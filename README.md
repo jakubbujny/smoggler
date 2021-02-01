@@ -6,9 +6,9 @@ Air quality measurement tool based on RPI and SDS011. It exposes website which c
 in LAN to display air quality with historical data.
 
 ## Web
-![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/web.jpg?raw=true)
+![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/web.png?raw=true)
 
-##Mobile
+## Mobile
 ![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/mobile.jpg?raw=true)
 
 
