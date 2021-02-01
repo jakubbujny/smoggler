@@ -1,4 +1,9 @@
 prod:
   queueSize: 30
+  minutesToWaitBetweenMeasurements: 1
+  secondsWhenSensorIsActivated: 60
 dev:
   queueSize: 30
+  sleepTime: 10
+  randomUpperRange: 15.5
+  randomLowerRange: 5.5

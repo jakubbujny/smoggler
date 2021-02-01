@@ -7,8 +7,8 @@
             integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
             crossorigin="anonymous"></script>
 
-    <div style="width: 50%; height: 240px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
-    <div style="width: 240px; height: 240px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
+    <div style="width: 50%; height: 400px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
+    <div style="width: 50%; height: 400px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
 
 <script>
     function addData(chart, label, data) {
@@ -20,27 +20,71 @@
     }
 
     $.getJSON( "/sensor-data", function( data ) {
-        let initData = data
+        let initData = data.measurements
+        let queueSize = data.queueSize
 
+        let labels = []
+        let pm25 = []
+        let pm10 = []
+
+        let reference25 = []
+        let reference10 = []
+
+        for (let i = 0; i < queueSize; i++) {
+            reference25.push(25)
+            reference10.push(50)
+        }
+
+        initData.forEach(element => function() {
+            labels.push(new Date(element.timestamp*1000).toLocaleTimeString("en-EN"))
+            pm25.push(element.pm25)
+            pm10.push(element.pm10)
+        }())
+        var chartPM25 = new Chart(document.getElementById('pm25').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'PM 2.5',
+                    type: "line",
+                    backgroundColor: 'rgb(175, 175, 175)',
+                    data: pm25
+                },
+                {
+                    label: 'WHO reference',
+                    type: "line",
+                    borderColor: 'rgb(255, 0, 0)',
+                    backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                    data: reference25
+                }
+                ]
+            },
+            options: {}
+        });
+        var chartPM10 = new Chart(document.getElementById('pm10').getContext('2d'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'PM 10',
+                    type: "line",
+                    backgroundColor: 'rgb(175, 175, 175)',
+                    data: pm10
+                },
+                    {
+                        label: 'WHO reference',
+                        type: "line",
+                        borderColor: 'rgb(255, 0, 0)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.0)',
+                        data: reference10
+                    }
+                ]
+            },
+            options: {}
+        });
     });
 
-    var ctx = document.getElementById('pm25').getContext('2d');
 
-    var chart = new Chart(ctx, {
-        type: 'line',
-
-        data: {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'PM 2.5',
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
-                data: [0, 10, 5, 2, 20, 30, 45]
-            }]
-        },
-
-        options: {}
-    });
 
 </script>
 

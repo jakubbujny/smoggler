@@ -15,11 +15,11 @@ sensor = None
 queueSize = None
 if os.environ["DEV"] is not None:
     queueSize = cfg.config["dev"]["queueSize"]
-    sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=10, randomUpperRange=15.0, randomLowerRange=5.0)
+    sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
     queueSize = cfg.config["prod"]["queueSize"]
     sds = lib.sds011.SDS011("/dev/ttyUSB0")
-    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=1, secondsWhenSensorIsActivated=60)
+    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=cfg.config["prod"]["minutesToWaitBetweenMeasurements"], secondsWhenSensorIsActivated=cfg.config["prod"]["secondsWhenSensorIsActivated"])
 
 sensor.startGatheringDataInBackground()
 
