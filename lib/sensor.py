@@ -1,8 +1,10 @@
+import datetime
 import queue
+import random
 import threading
 import time
-import typing
 
+from abc import ABC, abstractmethod
 from lib.sds011 import SDS011, InvalidResponseFromDevice
 
 class Measurement:
@@ -18,7 +20,19 @@ class Measurement:
     def __repr__(self):
         return self.__str__()
 
-class Sensor:
+
+class AbstractSensor(ABC):
+
+    @abstractmethod
+    def getAllAvailableData(self) -> [Measurement]:
+        pass
+
+    @abstractmethod
+    def startGatheringDataInBackground(self):
+        pass
+
+
+class Sensor(AbstractSensor):
 
     def __init__(self, sdsConnection: SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int, secondsWhenSensorIsActivated:int):
         self.sdsConnection = sdsConnection
@@ -53,3 +67,25 @@ class Sensor:
             self.measurementsQueue.put(Measurement(0, pm25, pm10))
             time.sleep(minutesToWaitBetweenMeasurements*60)
 
+
+class MockedDynamicSensor(AbstractSensor):
+
+    def __init__(self, queueSize:int, sleepTime:int, randomUpperRange:float, randomLowerRange:float):
+        self.measurementsQueue = queue.Queue(maxsize=queueSize)
+        self.sleepTime = sleepTime
+        self.randomUpperRange = randomUpperRange
+        self.randomLowerRange = randomLowerRange
+
+    def getAllAvailableData(self) -> [Measurement]:
+        return list(self.measurementsQueue.queue)
+
+    def startGatheringDataInBackground(self):
+        thread = threading.Thread(target=self.__start, args=(self.measurementsQueue, self.sleepTime, self.randomUpperRange, self.randomLowerRange))
+        thread.start()
+
+    def __start(self, queue:queue.Queue, sleepTime:int, randomUpperRange:float, randomLowerRange:float):
+        while True:
+            if queue.full():
+                queue.get()
+            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), random.uniform(randomLowerRange, randomUpperRange), random.uniform(randomLowerRange, randomUpperRange)))
+            time.sleep(sleepTime)
