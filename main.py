@@ -2,9 +2,9 @@ import json
 import os
 import time
 
-import lib.sds011
 import lib.sensor
 import lib.config
+import sds011
 
 from flask import Flask, jsonify
 app = Flask(__name__, static_folder='web',)
@@ -18,8 +18,9 @@ if "DEV" in os.environ:
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
     queueSize = cfg.config["prod"]["queueSize"]
-    sds = lib.sds011.SDS011("/dev/ttyUSB0")
-    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=cfg.config["prod"]["minutesToWaitBetweenMeasurements"], secondsWhenSensorIsActivated=cfg.config["prod"]["secondsWhenSensorIsActivated"])
+    sds = sds011.SDS011("/dev/ttyUSB0")
+    sds.set_working_period(rate=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
+    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"])
 
 sensor.startGatheringDataInBackground()
 

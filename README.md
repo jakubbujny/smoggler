@@ -17,5 +17,3 @@ All state is stored in mem so power off = historical data lost.
 # Implementation
 Backend Python3. 
 Frontend JQuery + Chart.js
-
-Integration with SDS011 is based on https://github.com/ikalchev/py-sds011 

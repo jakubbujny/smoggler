@@ -5,8 +5,9 @@ import random
 import threading
 import time
 
+
 from abc import ABC, abstractmethod
-from lib.sds011 import SDS011, InvalidResponseFromDevice
+import sds011
 
 class Measurement:
 
@@ -39,38 +40,24 @@ class AbstractSensor(ABC):
 
 class Sensor(AbstractSensor):
 
-    def __init__(self, sdsConnection: SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int, secondsWhenSensorIsActivated:int):
+    def __init__(self, sdsConnection: sds011.SDS011, queueSize:int):
         self.sdsConnection = sdsConnection
         self.measurementsQueue = queue.Queue(maxsize=queueSize)
-        self.minutesToWaitBetweenMeasurements = minutesToWaitBetweenMeasurements
-        self.secondsWhenSensorIsActivated = secondsWhenSensorIsActivated
 
     def getAllAvailableData(self) -> [Measurement]:
         return list(self.measurementsQueue.queue)
 
     def startGatheringDataInBackground(self):
-        thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue, self.minutesToWaitBetweenMeasurements, self.secondsWhenSensorIsActivated, ))
+        thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue))
         thread.start()
 
-    def __start(self, sdsConnection: SDS011, queue:queue.Queue, minutesToWaitBetweenMeasurements:int, secondsWhenSensorIsActivated:int):
-        first = True
+    def __start(self, sdsConnection: sds011.SDS011, queue:queue.Queue):
         while True:
-            try:
-                pm25, pm10 = sdsConnection.queryPM(secondsWhenSensorIsActivated)
-            except InvalidResponseFromDevice:
-                print("Received bad response from device, sleep and retry")
-                time.sleep(10)
-                continue
-
-            # For some unknown reason the first measurement seems to be always invalid so let's skip it
-            if first:
-                first = False
-                continue
+            meas = sdsConnection.read_measurement()
 
             if queue.full():
                 queue.get()
-            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), pm25, pm10))
-            time.sleep(minutesToWaitBetweenMeasurements*60)
+            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), meas["pm2.5"], meas["pm10"]))
 
 
 class MockedDynamicSensor(AbstractSensor):
