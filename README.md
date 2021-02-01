@@ -21,6 +21,8 @@ in LAN to display air quality with historical data.
 
 # Installation guide
 
+Dockerhub: https://hub.docker.com/r/jakubbujny/smoggler 
+
 # Implementation
 Backend Python3 together with sds011 library (https://pypi.org/project/sds011/).
 Data from sensor lands in FIFO queue and is exposed as JSON via /sensor-data endpoint.
