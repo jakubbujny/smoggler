@@ -1,4 +1,5 @@
-import configparser
+import yaml
+
 
 class Config:
     __instance = None
@@ -7,9 +8,7 @@ class Config:
             raise Exception("This class is a singleton!")
         else:
             Config.__instance = self
-        config = configparser.ConfigParser()
-        config.read(configPath)
-        self.config = config
+        self.config = yaml.load(open(configPath), Loader=yaml.FullLoader)
 
     @staticmethod
     def getConfig():

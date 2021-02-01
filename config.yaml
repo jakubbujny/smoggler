@@ -1,0 +1,4 @@
+prod:
+  queueSize: 30
+dev:
+  queueSize: 30

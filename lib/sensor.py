@@ -1,4 +1,5 @@
 import datetime
+import json
 import queue
 import random
 import threading
@@ -8,6 +9,10 @@ from abc import ABC, abstractmethod
 from lib.sds011 import SDS011, InvalidResponseFromDevice
 
 class Measurement:
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
 
     def __init__(self, timestamp:int, pm25:float, pm10:float):
         self.timestamp = timestamp
