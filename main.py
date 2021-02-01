@@ -18,7 +18,7 @@ if "DEV" in os.environ:
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
     queueSize = cfg.config["prod"]["queueSize"]
-    sds = sds011.SDS011("/dev/ttyUSB0")
+    sds = sds011.SDS011(cfg.config["prod"]["device"])
     sds.set_working_period(rate=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
     sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"])
 
