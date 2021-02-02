@@ -8,3 +8,5 @@ services:
     restart: always
     volumes:
       - ./config.yaml:/opt/workdir/config.yaml
+    ports:
+      - "80:5000"
