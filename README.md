@@ -29,7 +29,9 @@ in LAN to display air quality with historical data.
 * Open terminal and write command to run installation script
   
   ```curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/install.sh | sudo bash```
-Dockerhub: https://hub.docker.com/r/jakubbujny/smoggler 
+* Run `ifconfig` command, in wlan0 interface find inet section so you can find RPI's IP address e.g. `inet 192.168.1.105`
+* Open RPI's IP address in web browser e.g. `http://192.168.1.105`
+* All done - enjoy!
 
 # Troubleshooting
 
