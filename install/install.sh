@@ -6,7 +6,7 @@ ansible-galaxy install geerlingguy.docker_arm
 
 cd /tmp
 
-wget -O ansible-local.yaml  https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/ansible-local.yaml
+curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/ansible-local.yaml > ansible-local.yaml
 
 ansible-playbook ansible-local.yaml
 

@@ -21,7 +21,12 @@ in LAN to display air quality with historical data.
 
 # Installation guide
 
+* Install fresh Raspbian on your RPI (https://www.raspberrypi.org/software/)
+* Make sure your WIFI is configured with Internet access 
+
 Dockerhub: https://hub.docker.com/r/jakubbujny/smoggler 
+
+curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/install.sh | sudo bash
 
 # Implementation
 Backend Python3 together with sds011 library (https://pypi.org/project/sds011/).
