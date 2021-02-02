@@ -9,4 +9,11 @@
       file:
         path: /opt/smoggler
         state: directory
-
+    - name: Download docker-compose.yaml
+      get_url:
+        url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/docker-compose.yaml
+        dest: /opt/smoggler/docker-compose.yaml
+    - name: Download external config
+        get_url:
+          url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml
+          dest: /opt/smoggler/config.yaml
