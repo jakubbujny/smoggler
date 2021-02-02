@@ -17,3 +17,11 @@ cd /opt/smoggler
 docker-compose pull
 docker-compose up -d
 
+set +euo
+
+until $(curl --output /dev/null --silent --head --fail http://localhost); do
+    printf 'waiting for smoggler to become available'
+    sleep 3
+done
+
+printf 'All done!'
