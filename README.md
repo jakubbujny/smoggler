@@ -18,15 +18,27 @@ in LAN to display air quality with historical data.
 * Raspberry PI (tested with RPI3 B, Raspbian Buster Lite)
 * Nova Fitness SDS011 
 * USB-UART Converter
+* Internet connection 
 
 # Installation guide
 
 * Install fresh Raspbian on your RPI (https://www.raspberrypi.org/software/)
-* Make sure your WIFI is configured with Internet access 
-
+* Make sure your WIFI is configured with Internet access (https://www.raspberrypi.org/documentation/configuration/wireless/)
+* Make sure you have root permissions (already logged as root or using sudo)
+* Make sure SDS011 is already connected to RPI via USB  
+* Open terminal and write command to run installation script
+  
+  ```curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/install.sh | sudo bash```
 Dockerhub: https://hub.docker.com/r/jakubbujny/smoggler 
 
-curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/install.sh | sudo bash
+# Troubleshooting
+
+## Device not found
+If you see error like
+```
+Cannot start service smoggler: error gathering device information while adding custom device "/dev/ttyUSB0": no such file or directory
+```
+it means SDS011 is not found. Try to reconnect it and make again all steps from installation guide.
 
 # Implementation
 Backend Python3 together with sds011 library (https://pypi.org/project/sds011/).
