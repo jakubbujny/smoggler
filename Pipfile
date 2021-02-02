@@ -8,6 +8,7 @@ pyserial = "*"
 flask = "*"
 pyyaml = "*"
 sds011 = "*"
+requests = "*"
 
 [dev-packages]
 

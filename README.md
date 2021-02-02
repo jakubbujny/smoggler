@@ -33,6 +33,9 @@ in LAN to display air quality with historical data.
 * Open RPI's IP address in web browser e.g. `http://192.168.1.105`
 * All done - enjoy!
 
+# How to update?
+Run the same steps as in `Installation guide`
+
 # Troubleshooting
 
 ## Device not found
@@ -50,4 +53,3 @@ Frontend JQuery + Chart.js - simple ajax call + chart.
 # TODO
 * Live update of chart
 * Change config via HTML form
-* "New version available" info

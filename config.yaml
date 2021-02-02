@@ -1,3 +1,4 @@
+version: 0.0.3
 prod:
   queueSize: 30
   minutesToWaitBetweenMeasurements: 5
