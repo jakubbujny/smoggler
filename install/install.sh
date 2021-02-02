@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 apt-get install -y ansible
 
@@ -12,5 +13,6 @@ ansible-playbook ansible-local.yaml
 
 cd /opt/smoggler
 
+docker-compose pull
 docker-compose up -d
 
