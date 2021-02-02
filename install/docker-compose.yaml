@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  smoggler:
+    image: jakubbujny/smoggler:0.0.1
+    devices:
+      - "/dev/ttyUSB0:/dev/ttyUSB0"
+    restart: always
+

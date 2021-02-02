@@ -1,0 +1,12 @@
+---
+- name: "Install docker on RPI"
+  hosts: localhost
+  connection: local
+  roles:
+    - geerlingguy.docker_arm
+  tasks:
+    - name: Create workdir
+      file:
+        path: /opt/smoggler
+        state: directory
+
