@@ -11,7 +11,7 @@
             integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
             crossorigin="anonymous"></script>
 
-    <div id="version" style="color: red; font-weight: bold"></div>
+    <div id="version" style="margin: 0 auto; color: red; font-weight: bold; width: 50%; text-align: center"></div>
     <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm25" ></canvas></div>
     <br><br><br><br>
     <div style="width: 80%; height: 600px; margin: 0 auto;"><canvas id="pm10" ></canvas></div>
@@ -26,7 +26,7 @@
     }
     $.getJSON( "/check-version", function( data ) {
         if(data.version === "outdated") {
-            $("#version").html("New version available! Visit <a href='https://github.com/jakubbujny/smoggler#web'>https://github.com/jakubbujny/smoggler#web</a>")
+            $("#version").html("New version available! Visit <a href='https://github.com/jakubbujny/smoggler#how-to-update'>https://github.com/jakubbujny/smoggler#how-to-update</a>")
         }
     })
 

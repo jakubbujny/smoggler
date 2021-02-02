@@ -36,8 +36,9 @@ def sensorData():
 @app.route('/check-version')
 def checkVersion():
     currentVersion = cfg.config["version"]
-    r = requests.get("https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml", allow_redirects=True)
+    r = requests.get("https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml")
     downloaded = yaml.safe_load(r.content.decode("UTF-8"))
+    print(downloaded)
     if downloaded["version"] != currentVersion:
         return json.dumps({"version": "outdated"})
 
