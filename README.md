@@ -50,3 +50,4 @@ Frontend JQuery + Chart.js - simple ajax call + chart.
 # TODO
 * Live update of chart
 * Change config via HTML form
+* "New version available" info
