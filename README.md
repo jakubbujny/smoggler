@@ -2,17 +2,15 @@
 Air quality measurement tool based on RPI and SDS011. It exposes website which can be reached
 in LAN to display air quality with historical data.
 
-## Web
 ![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/web.png?raw=true)
 
-## Mobile
-![alt text](https://github.com/jakubbujny/smoggler/blob/main/readme/mobile.jpg?raw=true)
 
 # Features
 * Getting data from sensor
-* Presenting last N points of data (configurable via queueSize) on chart
+* Presenting data on charts reachable via RPI's IP address
+* 12 hours of history (state is stored in mem so power off = historical data lost)
 * Showing current value in chart's title
-* State is stored in mem so power off = historical data lost.
+* Automated installation
 
 # Requirements
 * Raspberry PI (tested with RPI3 B, Raspbian Buster Lite)
