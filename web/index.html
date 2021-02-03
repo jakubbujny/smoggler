@@ -72,6 +72,16 @@
                 ]
             },
             options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            maxTicksLimit: 10,
+                            fontSize: 20
+                        }
+                    }]
+                },
                 title: {
                     display: true,
                     text: 'PM 2.5 - current value: '+pm25[pm25.length - 1],
@@ -101,6 +111,16 @@
                 ]
             },
             options: {
+                scales: {
+                    xAxes: [{
+                        ticks: {
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            maxTicksLimit: 10,
+                            fontSize: 20
+                        }
+                    }]
+                },
                 title: {
                     display: true,
                     text: 'PM 10 - current value: '+pm10[pm10.length - 1],

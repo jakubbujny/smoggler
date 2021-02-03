@@ -1,10 +1,10 @@
-version: 0.0.4
+version: 0.0.5
 prod:
-  queueSize: 30
+  queueSize: 144
   minutesToWaitBetweenMeasurements: 5
   device: "/dev/ttyUSB0"
 dev:
-  queueSize: 30
-  sleepTime: 10
+  queueSize: 144
+  sleepTime: 1
   randomUpperRange: 15.5
   randomLowerRange: 5.5
