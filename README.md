@@ -61,3 +61,4 @@ Frontend JQuery + Chart.js - simple ajax call + chart.
 # TODO
 * Live update of chart
 * Change config via HTML form
+* Add push notifications to phones via IFTTT (https://medium.com/better-programming/how-to-send-push-notifications-to-your-phone-from-any-script-6b70e34748f6)
