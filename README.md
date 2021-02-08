@@ -51,6 +51,13 @@ Cannot start service smoggler: error gathering device information while adding c
 ```
 it means SDS011 is not found. Try to reconnect it and make again all steps from installation guide.
 
+## Docker network
+If you see error like
+```
+failed to add the host (vethXXX) <=> sandbox (vethYYY) pair interfaces: operation not supported
+```
+it means Docker cannot create network because of errors from Kernel. Restart RPI and run installation script once again.
+
 # Implementation
 Backend Python3 together with sds011 library (https://pypi.org/project/sds011/).
 Data from sensor lands in FIFO queue and is exposed as JSON via /sensor-data endpoint.
