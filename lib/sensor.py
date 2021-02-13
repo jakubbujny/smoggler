@@ -43,16 +43,20 @@ class Sensor(AbstractSensor):
     def __init__(self, sdsConnection: sds011.SDS011, queueSize:int):
         self.sdsConnection = sdsConnection
         self.measurementsQueue = queue.Queue(maxsize=queueSize)
+        self.breakLoopLock = threading.Lock()
+
+    def stop(self):
+        self.breakLoopLock.acquire()
 
     def getAllAvailableData(self) -> [Measurement]:
         return list(self.measurementsQueue.queue)
 
     def startGatheringDataInBackground(self):
-        thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue))
+        thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue, self.breakLoopLock))
         thread.start()
 
-    def __start(self, sdsConnection: sds011.SDS011, queue:queue.Queue):
-        while True:
+    def __start(self, sdsConnection: sds011.SDS011, queue:queue.Queue, breakLoopLock:threading.Lock):
+        while not breakLoopLock.locked():
             meas = sdsConnection.read_measurement()
 
             if queue.full():

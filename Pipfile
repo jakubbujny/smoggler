@@ -9,6 +9,8 @@ flask = "*"
 pyyaml = "*"
 sds011 = "*"
 requests = "*"
+pytest = "*"
+retry = "*"
 
 [dev-packages]
 
