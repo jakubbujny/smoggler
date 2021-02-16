@@ -1,0 +1,112 @@
+{% include "header.html" %}
+<style type="text/css">
+    form{
+        font-size: 2rem;
+    }
+    .hide {
+        display: none;
+    }
+
+    .onoffswitch {
+        position: relative; width: 180px;
+        -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    }
+    .onoffswitch-checkbox {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .onoffswitch-label {
+        display: block; overflow: hidden; cursor: pointer;
+        border: 2px solid ; border-radius: 11px;
+    }
+    .onoffswitch-inner {
+        display: block; width: 200%; margin-left: -100%;
+        transition: margin 0.3s ease-in 0s;
+    }
+    .onoffswitch-inner:before, .onoffswitch-inner:after {
+        display: block; float: left; width: 50%; height: 67px; padding: 0; line-height: 67px;
+        font-size: 40px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+        box-sizing: border-box;
+    }
+    .onoffswitch-inner:before {
+        content: "ON";
+        padding-left: 21px;
+        background-color: #34A7C1; color: #FFFFFF;
+    }
+    .onoffswitch-inner:after {
+        content: "OFF";
+        padding-right: 21px;
+        background-color: #EEEEEE; color: #999999;
+        text-align: right;
+    }
+    .onoffswitch-switch {
+        display: block; width: 48px; margin: 9.5px;
+        background: #FFFFFF;
+        position: absolute; top: 0; bottom: 0;
+        right: 109px;
+        border: 2px solid ; border-radius: 11px;
+        transition: all 0.3s ease-in 0s;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+        margin-left: 0;
+    }
+    .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+        right: 0px;
+    }
+</style>
+<body>
+{% include "menu_body.html" %}
+
+<script type="module" src="js/config.js"></script>
+
+<div class="container">
+    <form>
+        <div class="form-group row">
+            <div class="col-auto" >
+                <label for="inputHistoryLength" class="col-form-label">History length</label>
+            </div>
+            <div class="col-sm-2" >
+                <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+                <select class="form-control form-control-lg hide" id="inputHistoryLength">
+                    <option value="1">1h</option>
+                    <option value="4">4h</option>
+                    <option value="6">6h</option>
+                    <option value="12">12h</option>
+                    <option value="18">18h</option>
+                    <option value="24">1d</option>
+                    <option value="36">1.5d</option>
+                    <option value="48">2d</option>
+                    <option value="72">3d</option>
+                    <option value="168">7d</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-auto" >
+            <label for="inputFastMode" class="col-form-label">
+                <a href="#" class="hint" data-toggle="tooltip" data-placement="top" data-html="true" title="<h3>Get data from sensor every minute. WARNING: it might decrease lifetime of dust sensor</h3>">Fast mode</a> </label>
+            </div>
+            <div class="col-sm-2">
+                <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+                <div class="onoffswitch hide">
+                    <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" id="inputFastMode" tabindex="0" checked>
+                    <label class="onoffswitch-label" for="inputFastMode">
+                        <span class="onoffswitch-inner"></span>
+                        <span class="onoffswitch-switch"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <input id="submit" class="btn btn-primary" type="button" value="Save">
+            </div>
+        </div>
+    </form>
+</div>
+
+</body>
+
+{% include "footer.html" %}
+

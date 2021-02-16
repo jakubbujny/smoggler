@@ -1,5 +1,6 @@
 import json
 import os
+
 import requests
 import yaml
 
@@ -7,21 +8,21 @@ import lib.sensor
 import lib.config
 import sds011
 
-from flask import Flask, jsonify
+from flask import Flask, render_template, send_from_directory
+
 app = Flask(__name__, static_folder='web',)
 
 cfg = lib.config.Config("config.yaml")
 
 sensor = None
 queueSize = None
-if "DEV" in os.environ:
+if "DEV" in os.environ and os.environ["DEV"] == "true":
     queueSize = cfg.config["dev"]["queueSize"]
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
     queueSize = cfg.config["prod"]["queueSize"]
     sds = sds011.SDS011(cfg.config["prod"]["device"])
-    sds.set_working_period(rate=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
-    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"])
+    sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
 
 sensor.startGatheringDataInBackground()
 
@@ -43,13 +44,39 @@ def checkVersion():
 
     return json.dumps({"version": "latest"})
 
+@app.route('/config-data')
+def configData():
+    return json.dumps(cfg.config)
+
+@app.route('/js/<path:path>')
+def send_js(path):
+    return send_from_directory('js', path)
+
+
 @app.route('/')
 def root():
-    return app.send_static_file('index.html')
+    return render_template('index.html')
+
+
+@app.route('/config')
+def config():
+    return render_template('config.html')
+
 
 @app.route('/icon.png')
 def icon():
     return app.send_static_file('icon.png')
 
+
+#disable cache
+@app.after_request
+def add_header(r):
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 if __name__ == "__main__":
+    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
     app.run(host='0.0.0.0')

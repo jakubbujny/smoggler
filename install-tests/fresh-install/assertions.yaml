@@ -1,0 +1,21 @@
+---
+- name: "Assertions"
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Check if smoggler is running
+    uri:
+      url: http://localhost:80
+      return_content: yes
+    register: rootpage
+  - name: Fail if Smoggler is not in the page content
+    fail:
+    when: "'Smoggler' not in rootpage.content"
+  - name: Check if config content is fine
+    uri:
+      url: http://localhost:80/config
+      return_content: yes
+    register: configpage
+  - name: Fail if queueSize is not in the page content
+    fail:
+    when: "'queueSize' not in configpage.content"

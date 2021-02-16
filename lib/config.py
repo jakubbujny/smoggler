@@ -1,4 +1,8 @@
+import logging
+
 import yaml
+
+from lib.logger import logger
 
 
 class Config:
@@ -8,6 +12,7 @@ class Config:
             raise Exception("This class is a singleton!")
         else:
             Config.__instance = self
+        logger.info(f"Loading config from {configPath}")
         self.config = yaml.load(open(configPath), Loader=yaml.FullLoader)
 
     @staticmethod

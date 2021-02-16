@@ -2,9 +2,15 @@
 - name: "Install docker on RPI"
   hosts: localhost
   connection: local
-  roles:
-    - geerlingguy.docker_arm
   tasks:
+    - name: Install docker for ARM
+      when: lookup('env','DEV') == "false"
+      include_role:
+        name: geerlingguy.docker_arm
+    - name: Install docker for amd64
+      when: lookup('env','DEV') == "true"
+      include_role:
+        name: geerlingguy.docker
     - name: Create workdir
       file:
         path: /opt/smoggler
@@ -14,8 +20,39 @@
         url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/docker-compose.yaml
         dest: /opt/smoggler/docker-compose.yaml
         force: yes
-    - name: Download external config
+      when: lookup('env','DEV') == "false"
+    - name: Copy docker-compose.yaml
+      copy:
+        src: /vagrant/docker-compose.yaml
+        dest: /opt/smoggler/docker-compose.yaml
+      when: lookup('env','DEV') == "true"
+    - name: Check that the config exists
+      stat:
+        path: /opt/smoggler/config.yaml
+      register: config_stat_result
+    - name: Download official config
       get_url:
         url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml
-        dest: /opt/smoggler/config.yaml
+        dest: /opt/smoggler/official_config.yaml
         force: yes
+      when: lookup('env','DEV') == "false"
+    - name: Copy external config
+      copy:
+        src: /vagrant/config.yaml
+        dest: /opt/smoggler/official_config.yaml
+      when: lookup('env','DEV') == "true"
+    - name: Copy official config if doesn't exist
+      copy:
+        src: /opt/smoggler/official_config.yaml
+        dest: /opt/smoggler/config.yaml
+      when: not config_stat_result.stat.exists
+    - name: Combine configs
+      copy:
+        dest: /opt/smoggler/config.yaml
+        content: "{{ lookup('file', '/opt/smoggler/official_config.yaml') | from_yaml | combine(lookup('file', '/opt/smoggler/config.yaml') | from_yaml, recursive=True) | to_yaml }}"
+      when: config_stat_result.stat.exists
+    - name: Set version
+      lineinfile:
+        path: /opt/smoggler/config.yaml
+        regexp: '^version'
+        line: "version: {{ (lookup('file', '/opt/smoggler/official_config.yaml') | from_yaml).version  }}"

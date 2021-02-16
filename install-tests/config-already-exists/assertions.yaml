@@ -1,0 +1,27 @@
+---
+- name: "Assertions"
+  hosts: localhost
+  connection: local
+  vars:
+    config: "{{ lookup('file', '/opt/smoggler/config.yaml') | from_yaml }}"
+  tasks:
+  - name: Check if smoggler is running
+    uri:
+      url: http://localhost:80
+      return_content: yes
+    register: rootpage
+  - name: Fail if Smoggler is not in the page content
+    fail:
+    when: "'Smoggler' not in rootpage.content"
+  - name: Print config
+    debug:
+      msg: "{{ config }}"
+  - name: Check if existing config preserved
+    fail:
+    when: config.prod.queueSize != 1
+  - name: Check if new fields are added
+    fail:
+    when: config.prod.minutesToWaitBetweenMeasurements != 5
+  - name: Check if version bumped
+    fail:
+    when: config.version == "0.0.0"

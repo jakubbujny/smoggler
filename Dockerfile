@@ -6,6 +6,6 @@ ADD . /opt/workdir
 
 WORKDIR /opt/workdir
 
-RUN pipenv install
+RUN pipenv install --system --deploy --ignore-pipfile
 
-CMD pipenv run python3 main.py
+CMD python3 main.py

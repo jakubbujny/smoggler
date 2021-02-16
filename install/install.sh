@@ -1,20 +1,37 @@
 #!/bin/bash
 set -euo pipefail
 
+VERSION=0.0.6
+
+DEV=${DEV:-"false"}
+
 apt-get update
-apt-get install -y ansible
+apt-get install -y ansible curl
 
-ansible-galaxy install geerlingguy.docker_arm
+if [ "$DEV" = "true" ]; then
+  ansible-galaxy install geerlingguy.docker
+else
+  ansible-galaxy install geerlingguy.docker_arm
+fi
 
-cd /tmp
+if [ "$DEV" != "true" ]; then
+  cd /tmp
+  curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/${VERSION}/install/ansible-local.yaml > ansible-local.yaml
+fi
 
-curl -s https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/ansible-local.yaml > ansible-local.yaml
-
-ansible-playbook ansible-local.yaml
+DEV=${DEV} ansible-playbook ansible-local.yaml
 
 cd /opt/smoggler
 
-docker-compose pull
+if [ "$DEV" = "true" ]; then
+  echo "DEV=true" > .env
+fi
+if [ "$DEV" = "true" ]; then
+  docker load -i /vagrant/image.tgz
+else
+  docker-compose pull
+fi
+
 docker-compose up -d
 
 set +euo
@@ -25,3 +42,5 @@ until $(curl --output /dev/null --silent --head --fail http://localhost); do
 done
 
 echo 'All done!'
+
+cd ${OLDPWD}

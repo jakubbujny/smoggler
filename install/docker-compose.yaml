@@ -11,3 +11,5 @@ services:
       - ./config.yaml:/opt/workdir/config.yaml
     ports:
       - "80:5000"
+    environment:
+      - DEV=${DEV}
