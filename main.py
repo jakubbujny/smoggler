@@ -47,6 +47,10 @@ def checkVersion():
 def root():
     return app.send_static_file('index.html')
 
+@app.route('/config')
+def config():
+    return app.send_static_file('config.html')
+
 @app.route('/icon.png')
 def icon():
     return app.send_static_file('icon.png')
