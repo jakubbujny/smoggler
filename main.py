@@ -53,6 +53,8 @@ def configSave():
     requestData = request.get_json()
     sensor.setNewQueueSize(requestData['queueSize'])
     sensor.setDelayBetweenMeasurements(requestData['minutesToWaitBetweenMeasurements'])
+    cfg.config["prod"]["queueSize"] = requestData['queueSize']
+    cfg.config["prod"]["minutesToWaitBetweenMeasurements"] = requestData['minutesToWaitBetweenMeasurements']
     cfg.saveConfig()
     return "ok"
 

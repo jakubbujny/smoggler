@@ -49,6 +49,9 @@ class AbstractSensor(ABC):
     def setNewQueueSize(self, size: int):
         pass
 
+    @abstractmethod
+    def setDelayBetweenMeasurements(self, delay: int):
+        pass
 
 class Sensor(AbstractSensor):
 
@@ -120,4 +123,7 @@ class MockedDynamicSensor(AbstractSensor):
             time.sleep(sleepTime)
 
     def setNewQueueSize(self, size: int):
+        pass
+
+    def setDelayBetweenMeasurements(self, delay: int):
         pass

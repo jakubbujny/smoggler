@@ -3,8 +3,6 @@ $(function () {
 })
 
 $.getJSON( "/config-data", function( data ) {
-    console.log(data.prod.queueSize)
-    console.log(data.prod.minutesToWaitBetweenMeasurements)
     if (data.prod.minutesToWaitBetweenMeasurements === 1) {
         $('#inputFastMode').prop('checked', true);
     } else {
@@ -23,7 +21,6 @@ $('#submit').click(function () {
         minutesToWaitBetweenMeasurements = 1
     }
     let queueSize = $('#inputHistoryLength').val() * 60 / minutesToWaitBetweenMeasurements
-    console.log(queueSize)
     $.ajax('/config-save', {
         data: JSON.stringify({"minutesToWaitBetweenMeasurements": minutesToWaitBetweenMeasurements, "queueSize": queueSize}),
         contentType: 'application/json',
