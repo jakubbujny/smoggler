@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   smoggler:
-    image: jakubbujny/smoggler:latest
+    image: jakubbujny/smoggler:${VERSION}
     privileged: true
     devices:
       - "/dev/ttyUSB0:/dev/ttyUSB0"

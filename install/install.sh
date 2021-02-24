@@ -25,7 +25,11 @@ cd /opt/smoggler
 
 if [ "$DEV" = "true" ]; then
   echo "DEV=true" > .env
+  echo "VERSION=latest" >> .env
+else
+  echo "VERSION=${VERSION}" > .env
 fi
+
 if [ "$DEV" = "true" ]; then
   docker load -i /vagrant/image.tgz
 else
