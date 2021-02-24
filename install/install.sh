@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-VERSION=0.0.7-rc1
+export VERSION=0.0.7-rc1
 
 DEV=${DEV:-"false"}
 

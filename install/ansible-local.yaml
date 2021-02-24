@@ -17,7 +17,7 @@
         state: directory
     - name: Download docker-compose.yaml
       get_url:
-        url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/install/docker-compose.yaml
+        url: "https://raw.githubusercontent.com/jakubbujny/smoggler/{{ lookup('env','VERSION') }}/install/docker-compose.yaml"
         dest: /opt/smoggler/docker-compose.yaml
         force: yes
       when: lookup('env','DEV') == "false"
@@ -32,7 +32,7 @@
       register: config_stat_result
     - name: Download official config
       get_url:
-        url: https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml
+        url: "https://raw.githubusercontent.com/jakubbujny/smoggler/{{ lookup('env','VERSION') }}/config.yaml"
         dest: /opt/smoggler/official_config.yaml
         force: yes
       when: lookup('env','DEV') == "false"
