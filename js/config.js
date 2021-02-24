@@ -16,6 +16,8 @@ $.getJSON( "/config-data", function( data ) {
 })
 
 $('#submit').click(function () {
+    $('#submit').addClass("hide")
+    $('#button-spinner').removeClass("hide")
     let minutesToWaitBetweenMeasurements = 5
     if ($('#inputFastMode').is(":checked")) {
         minutesToWaitBetweenMeasurements = 1
@@ -30,12 +32,16 @@ $('#submit').click(function () {
             setTimeout(function () {
                 $("#submit").removeClass("btn-success").val("Save")
             }, 5000)
+            $('#submit').removeClass("hide")
+            $('#button-spinner').addClass("hide")
         },
         error: function () {
             $("#submit").addClass("btn-danger").val("Failure!")
             setTimeout(function () {
                 $("#submit").removeClass("btn-danger").val("Save")
             }, 5000)
+            $('#submit').removeClass("hide")
+            $('#button-spinner').addClass("hide")
         }
     })
 })

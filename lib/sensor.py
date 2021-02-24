@@ -86,19 +86,11 @@ class Sensor(AbstractSensor):
         self.sdsConnection.set_working_period(rate=minutesToWaitBetweenMeasurements)
 
     def setNewQueueSize(self, size: int):
-        logger.info("Acquiring lock")
-        self.breakLoopLock.acquire()
-        while self.thread.is_alive():
-            logger.info("waiting for thread to stop")
-            time.sleep(0.1)
         newQueue = queue.Queue(size)
         logger.info("copying queue")
         for el in list(self.measurementsQueue.queue):
             newQueue.put(el)
         self.measurementsQueue = newQueue
-        logger.info("Releasing lock")
-        self.breakLoopLock.release()
-        self.startGatheringDataInBackground()
 
 class MockedDynamicSensor(AbstractSensor):
 
