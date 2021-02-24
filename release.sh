@@ -12,3 +12,7 @@ git commit -m "release ${version}"
 git push
 git tag ${version}
 git push --tags
+
+export VERSION=${version}
+
+./docker-release.sh
