@@ -18,12 +18,27 @@ $.getJSON( "/config-data", function( data ) {
 })
 
 $('#submit').click(function () {
-    console.log()
-    console.log()
     let minutesToWaitBetweenMeasurements = 5
     if ($('#inputFastMode').is(":checked")) {
         minutesToWaitBetweenMeasurements = 1
     }
     let queueSize = $('#inputHistoryLength').val() * 60 / minutesToWaitBetweenMeasurements
     console.log(queueSize)
+    $.ajax('/config-save', {
+        data: JSON.stringify({"minutesToWaitBetweenMeasurements": minutesToWaitBetweenMeasurements, "queueSize": queueSize}),
+        contentType: 'application/json',
+        type: 'POST',
+        success: function () {
+            $("#submit").addClass("btn-success").val("Saved!")
+            setTimeout(function () {
+                $("#submit").removeClass("btn-success").val("Save")
+            }, 5000)
+        },
+        error: function () {
+            $("#submit").addClass("btn-danger").val("Failure!")
+            setTimeout(function () {
+                $("#submit").removeClass("btn-danger").val("Save")
+            }, 5000)
+        }
+    })
 })

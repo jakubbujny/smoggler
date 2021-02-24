@@ -79,6 +79,9 @@ class Sensor(AbstractSensor):
                 queue.get()
             self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), meas["pm2.5"], meas["pm10"]))
 
+    def setDelayBetweenMeasurements(self, minutesToWaitBetweenMeasurements):
+        self.sdsConnection.set_working_period(rate=minutesToWaitBetweenMeasurements)
+
     def setNewQueueSize(self, size: int):
         logger.info("Acquiring lock")
         self.breakLoopLock.acquire()

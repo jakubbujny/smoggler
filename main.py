@@ -8,7 +8,7 @@ import lib.sensor
 import lib.config
 import sds011
 
-from flask import Flask, render_template, send_from_directory
+from flask import Flask, render_template, send_from_directory, request, jsonify
 
 app = Flask(__name__, static_folder='web',)
 
@@ -47,6 +47,14 @@ def checkVersion():
 @app.route('/config-data')
 def configData():
     return json.dumps(cfg.config)
+
+@app.route('/config-save', methods=['POST'])
+def configSave():
+    requestData = request.get_json()
+    sensor.setNewQueueSize(requestData['queueSize'])
+    sensor.setDelayBetweenMeasurements(requestData['minutesToWaitBetweenMeasurements'])
+    cfg.saveConfig()
+    return "ok"
 
 @app.route('/js/<path:path>')
 def send_js(path):
