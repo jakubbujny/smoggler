@@ -77,6 +77,7 @@ class Sensor(AbstractSensor):
     def __start(self, sdsConnection: SDS011, queue:queue.Queue, breakLoopLock:threading.Lock, minutesToWaitBetweenMeasurements: int):
         while not breakLoopLock.locked():
             self.sdsConnection.sleep(sleep=False)
+            time.sleep(30)
             meas = sdsConnection.query()
             self.sdsConnection.sleep()
             if queue.full():
