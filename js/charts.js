@@ -1,7 +1,7 @@
-function CreatePMChart(queueSize, pmName, pmMeasurements, labels, referenceValue, renderContainerID) {
+function CreatePMChart(pmName, pmMeasurements, labels, referenceValue, renderContainerID) {
     let reference = []
 
-    for (let i = 0; i < queueSize; i++) {
+    for (let i = 0; i < len(pmMeasurements); i++) {
         reference.push(referenceValue)
     }
 

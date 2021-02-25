@@ -101,6 +101,8 @@ class Sensor(AbstractSensor):
         newQueue = queue.Queue(size)
         logger.info("copying queue")
         for el in list(self.measurementConfiguration.queue.queue):
+            if newQueue.full():
+                newQueue.get()
             newQueue.put(el)
         self.measurementConfiguration.queue = newQueue
 

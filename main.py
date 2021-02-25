@@ -33,7 +33,7 @@ def sensorData():
     resp = []
     for measurement in sensor.getAllAvailableData():
         resp.append({"timestamp":measurement.timestamp, "pm25": measurement.pm25, "pm10": measurement.pm10})
-    return json.dumps({"measurements": resp, "queueSize": queueSize})
+    return json.dumps({"measurements": resp})
 
 @app.route('/check-version')
 def checkVersion():

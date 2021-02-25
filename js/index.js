@@ -19,9 +19,9 @@ $.getJSON( "/sensor-data", function( data ) {
 
     $(".loading-spinner-to-delete").remove()
 
-    CreatePMChart(data.queueSize, "2.5", pm25, labels, 25, "pm25")
+    CreatePMChart("2.5", pm25, labels, 25, "pm25")
     CreatePMGauge(pm25, '2.5', 'pm25_gauge', 25)
 
-    CreatePMChart(data.queueSize, "10", pm10, labels, 50, "pm10")
+    CreatePMChart("10", pm10, labels, 50, "pm10")
     CreatePMGauge(pm10, '10', 'pm10_gauge', 50)
 })
