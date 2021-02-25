@@ -1,4 +1,4 @@
-version: 0.0.7-rc3
+version: 0.0.7-rc4
 prod:
   queueSize: 144
   minutesToWaitBetweenMeasurements: 5

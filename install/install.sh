@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-export VERSION=0.0.7-rc3
+export VERSION=0.0.7-rc4
 
 DEV=${DEV:-"false"}
 
@@ -25,9 +25,9 @@ cd /opt/smoggler
 
 if [ "$DEV" = "true" ]; then
   echo "DEV=true" > .env
-  echo "VERSION=0.0.7-rc3
+  echo "VERSION=0.0.7-rc4
 else
-  echo "VERSION=0.0.7-rc3
+  echo "VERSION=0.0.7-rc4
 fi
 
 if [ "$DEV" = "true" ]; then
