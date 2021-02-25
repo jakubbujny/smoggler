@@ -8,8 +8,7 @@ in LAN to display air quality with historical data.
 # Features
 * Getting data from sensor
 * Presenting data on charts reachable via RPI's IP address
-* 12 hours of history (state is stored in mem so power off = historical data lost)
-* Showing current value in chart's title
+* Configurable history length
 * Automated installation
 
 # Requirements
@@ -58,12 +57,7 @@ failed to add the host (vethXXX) <=> sandbox (vethYYY) pair interfaces: operatio
 ```
 it means Docker cannot create network because of errors from Kernel. Restart RPI and run installation script once again.
 
-# Implementation
-Backend Python3 together with sds011 library (https://pypi.org/project/sds011/).
-Data from sensor lands in FIFO queue and is exposed as JSON via /sensor-data endpoint.
-Frontend JQuery + Chart.js - simple ajax call + chart.
 
 # TODO
 * Live update of chart
-* Change config via HTML form
 * Add push notifications to phones via IFTTT (https://medium.com/better-programming/how-to-send-push-notifications-to-your-phone-from-any-script-6b70e34748f6)

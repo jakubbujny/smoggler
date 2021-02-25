@@ -1,0 +1,47 @@
+{% include "header.html" %}
+<style type="text/css">
+    div.chart_div table {
+        width: auto;
+        margin: 0 auto !important;
+    }
+</style>
+<body>
+{% include "menu_body.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script src="//cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
+
+<script
+            src="https://code.jquery.com/jquery-3.5.1.min.js"
+            integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+
+<script type="module" src="js/index.js"></script>
+
+<div id="version" style="margin: 0 auto; color: red; font-weight: bold; width: 50%; text-align: center"></div>
+<div class="container">
+    <div class="row">
+        <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+        <canvas id="pm25"></canvas>
+    </div>
+    <div class="row">
+        <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+        <canvas id="pm10"></canvas>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+            <div id="pm25_gauge" class="chart_div" style="min-height: 450px;"></div>
+        </div>
+        <div class="col-sm-6">
+            <div class="text-center loading-spinner-to-delete"><div class="spinner-border align-items-center" role="status"></div></div>
+            <div id="pm10_gauge" class="chart_div" style="min-height: 450px;"></div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+{% include "footer.html" %}
+

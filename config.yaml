@@ -1,4 +1,4 @@
-version: 0.0.6
+version: 0.0.7-rc9
 prod:
   queueSize: 144
   minutesToWaitBetweenMeasurements: 5
@@ -6,5 +6,5 @@ prod:
 dev:
   queueSize: 144
   sleepTime: 1
-  randomUpperRange: 15.5
+  randomUpperRange: 50
   randomLowerRange: 5.5

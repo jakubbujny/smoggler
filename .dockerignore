@@ -1,0 +1,7 @@
+**/.vagrant
+.idea
+.pytest_cache
+
+install/image.tgz
+install/config.yaml
+

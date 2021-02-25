@@ -1,0 +1,6 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/buster64"
+  config.vm.synced_folder "../../install", "/vagrant"
+  config.vm.provision "file", source: "assertions.yaml", destination: "/vagrant/assertions.yaml"
+  config.vm.provision "shell", path: "inside-vm.sh"
+end

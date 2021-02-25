@@ -1,22 +1,26 @@
+import logging
+import sys
+import time
 from unittest.mock import Mock
 
-import sds011
+import pytest
 from retry import retry
 
+from lib.sds011 import SDS011
 from lib.sensor import Sensor
 
 
 def testValidSensorData():
     # given
-    sdsMock = Mock(spec=sds011.SDS011)
-    sdsMock.read_measurement.return_value = {"pm2.5": 10.0, "pm10": 20.0}
-    sensor = Sensor(sdsMock, 5)
+    sdsMock = Mock(spec=SDS011)
+    sdsMock.query.return_value = 10.0, 20.0
+    sensor = Sensor(sdsMock, 5, 5, True)
     # when
     sensor.startGatheringDataInBackground()
     data = getDataFromSensor(sensor)
     sensor.stop()
     # then
-    sdsMock.read_measurement.assert_called()
+    sdsMock.query.assert_called()
     assert data[0].pm25 == 10.0
     assert data[0].pm10 == 20.0
 
@@ -27,3 +31,24 @@ def getDataFromSensor(sensor: Sensor):
         raise ValueError
     return sensor.getAllAvailableData()
 
+
+def testSetNewQueueSize():
+    # given
+    sdsMock = Mock(spec=SDS011)
+
+    def fn():
+        time.sleep(0.5)
+        return 10.0, 20.0
+    sdsMock.query = fn
+    sensor = Sensor(sdsMock, 15, 5, True)
+    # when
+    sensor.startGatheringDataInBackground()
+    dataBefore = getDataFromSensor(sensor)
+    sensor.setNewQueueSize(100)
+    time.sleep(1)
+    dataAfter = sensor.getAllAvailableData()
+    sensor.stop()
+    # then
+    for pointBefore in dataBefore:
+        assert pointBefore in dataAfter
+    assert len(dataBefore) != len(dataAfter)
