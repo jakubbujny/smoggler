@@ -33,14 +33,6 @@ in LAN to display air quality with historical data.
 # How to update?
 Run the same steps as in `Installation guide`
 
-# Config
-Defaults
-```
-  queueSize: 144
-  minutesToWaitBetweenMeasurements: 5
-```
-means 12h of history stored in-mem.
-
 # Troubleshooting
 
 ## Device not found
