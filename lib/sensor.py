@@ -55,17 +55,18 @@ class AbstractSensor(ABC):
 
 class MeasurementConfiguration:
 
-    def __init__(self, sdsConnection: SDS011, queue:queue.Queue, minutesToWaitBetweenMeasurements:int, breakLoopLock:threading.Lock):
+    def __init__(self, sdsConnection: SDS011, queue:queue.Queue, minutesToWaitBetweenMeasurements:int, breakLoopLock:threading.Lock, tests:bool):
         self.sdsConnection = sdsConnection
         self.queue = queue
         self.minutesToWaitBetweenMeasurements = minutesToWaitBetweenMeasurements
         self.breakLoopLock = breakLoopLock
+        self.tests = tests
 
 
 class Sensor(AbstractSensor):
 
-    def __init__(self, sdsConnection: SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int):
-        self.measurementConfiguration = MeasurementConfiguration(sdsConnection, queue.Queue(maxsize=queueSize), minutesToWaitBetweenMeasurements, threading.Lock())
+    def __init__(self, sdsConnection: SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int, tests=False):
+        self.measurementConfiguration = MeasurementConfiguration(sdsConnection, queue.Queue(maxsize=queueSize), minutesToWaitBetweenMeasurements, threading.Lock(), tests)
 
     def stop(self):
         logger.info("Stopping loop")
@@ -83,13 +84,15 @@ class Sensor(AbstractSensor):
     def __start(self, measurementConfiguration:MeasurementConfiguration):
         while not measurementConfiguration.breakLoopLock.locked():
             measurementConfiguration.sdsConnection.sleep(sleep=False)
-            time.sleep(30)
+            if not measurementConfiguration.tests:
+                time.sleep(30)
             meas = measurementConfiguration.sdsConnection.query()
             measurementConfiguration.sdsConnection.sleep()
             if measurementConfiguration.queue.full():
                 measurementConfiguration.queue.get()
             measurementConfiguration.queue.put(Measurement(int(datetime.datetime.now().timestamp()), meas[0], meas[1]))
-            time.sleep((60*measurementConfiguration.minutesToWaitBetweenMeasurements)-30)
+            if not measurementConfiguration.tests:
+                time.sleep((60*measurementConfiguration.minutesToWaitBetweenMeasurements)-30)
 
     def setDelayBetweenMeasurements(self, minutesToWaitBetweenMeasurements):
         self.measurementConfiguration.minutesToWaitBetweenMeasurements = minutesToWaitBetweenMeasurements
@@ -97,7 +100,7 @@ class Sensor(AbstractSensor):
     def setNewQueueSize(self, size: int):
         newQueue = queue.Queue(size)
         logger.info("copying queue")
-        for el in list(self.measurementConfiguration.queue):
+        for el in list(self.measurementConfiguration.queue.queue):
             newQueue.put(el)
         self.measurementConfiguration.queue = newQueue
 
