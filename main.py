@@ -16,12 +16,9 @@ app = Flask(__name__, static_folder='web',)
 cfg = lib.config.Config("config.yaml")
 
 sensor = None
-queueSize = None
 if "DEV" in os.environ and os.environ["DEV"] == "true":
-    queueSize = cfg.config["dev"]["queueSize"]
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
-    queueSize = cfg.config["prod"]["queueSize"]
     sds = sds011.SDS011(cfg.config["prod"]["device"], use_query_mode=True)
     sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
 
@@ -37,10 +34,9 @@ def sensorData():
 
 @app.route('/check-version')
 def checkVersion():
-    currentVersion = cfg.config["version"]
     r = requests.get("https://raw.githubusercontent.com/jakubbujny/smoggler/main/config.yaml")
     downloaded = yaml.safe_load(r.content.decode("UTF-8"))
-    if downloaded["version"] != currentVersion:
+    if downloaded["version"] != cfg.config["version"]:
         return json.dumps({"version": "outdated"})
 
     return json.dumps({"version": "latest"})
