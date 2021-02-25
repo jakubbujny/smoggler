@@ -8,9 +8,9 @@ import time
 
 
 from abc import ABC, abstractmethod
-import sds011
 
 from lib.logger import logger
+from lib.sds011 import SDS011
 
 
 class Measurement:
@@ -55,9 +55,9 @@ class AbstractSensor(ABC):
 
 class Sensor(AbstractSensor):
 
-    def __init__(self, sdsConnection: sds011.SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int):
+    def __init__(self, sdsConnection: SDS011, queueSize:int, minutesToWaitBetweenMeasurements:int):
         self.sdsConnection = sdsConnection
-        self.sdsConnection.set_working_period(rate=minutesToWaitBetweenMeasurements)
+        self.minutesToWaitBetweenMeasurements = minutesToWaitBetweenMeasurements
         self.measurementsQueue = queue.Queue(maxsize=queueSize)
         self.breakLoopLock = threading.Lock()
 
@@ -71,19 +71,21 @@ class Sensor(AbstractSensor):
 
     def startGatheringDataInBackground(self):
         logger.info("starting gathering data")
-        self.thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue, self.breakLoopLock))
+        self.thread = threading.Thread(target=self.__start, args=(self.sdsConnection, self.measurementsQueue, self.breakLoopLock, self.minutesToWaitBetweenMeasurements))
         self.thread.start()
 
-    def __start(self, sdsConnection: sds011.SDS011, queue:queue.Queue, breakLoopLock:threading.Lock):
+    def __start(self, sdsConnection: SDS011, queue:queue.Queue, breakLoopLock:threading.Lock, minutesToWaitBetweenMeasurements: int):
         while not breakLoopLock.locked():
-            meas = sdsConnection.read_measurement()
-
+            self.sdsConnection.sleep(sleep=False)
+            meas = sdsConnection.query()
+            self.sdsConnection.sleep()
             if queue.full():
                 queue.get()
-            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), meas["pm2.5"], meas["pm10"]))
+            self.measurementsQueue.put(Measurement(int(datetime.datetime.now().timestamp()), meas[0], meas[1]))
+            time.sleep(60*minutesToWaitBetweenMeasurements)
 
     def setDelayBetweenMeasurements(self, minutesToWaitBetweenMeasurements):
-        self.sdsConnection.set_working_period(rate=minutesToWaitBetweenMeasurements)
+        self.minutesToWaitBetweenMeasurements = minutesToWaitBetweenMeasurements
 
     def setNewQueueSize(self, size: int):
         newQueue = queue.Queue(size)

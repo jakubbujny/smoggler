@@ -6,9 +6,10 @@ import yaml
 
 import lib.sensor
 import lib.config
-import sds011
 
 from flask import Flask, render_template, send_from_directory, request, jsonify
+
+from lib import sds011
 
 app = Flask(__name__, static_folder='web',)
 
@@ -21,7 +22,7 @@ if "DEV" in os.environ and os.environ["DEV"] == "true":
     sensor = lib.sensor.MockedDynamicSensor(queueSize=cfg.config["dev"]["queueSize"], sleepTime=cfg.config["dev"]["sleepTime"], randomUpperRange=cfg.config["dev"]["randomUpperRange"], randomLowerRange=cfg.config["dev"]["randomLowerRange"])
 else:
     queueSize = cfg.config["prod"]["queueSize"]
-    sds = sds011.SDS011(cfg.config["prod"]["device"])
+    sds = sds011.SDS011(cfg.config["prod"]["device"], use_query_mode=True)
     sensor = lib.sensor.Sensor(sdsConnection=sds, queueSize=cfg.config["prod"]["queueSize"], minutesToWaitBetweenMeasurements=cfg.config["prod"]["minutesToWaitBetweenMeasurements"])
 
 sensor.startGatheringDataInBackground()
