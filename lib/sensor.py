@@ -88,9 +88,12 @@ class Sensor(AbstractSensor):
                 time.sleep(30)
             meas = measurementConfiguration.sdsConnection.query()
             measurementConfiguration.sdsConnection.sleep()
-            if measurementConfiguration.queue.full():
-                measurementConfiguration.queue.get()
-            measurementConfiguration.queue.put(Measurement(int(datetime.datetime.now().timestamp()), meas[0], meas[1]))
+            if meas is None:
+                logger.info("Empty response from sensor, skipping")
+            else:
+                if measurementConfiguration.queue.full():
+                    measurementConfiguration.queue.get()
+                measurementConfiguration.queue.put(Measurement(int(datetime.datetime.now().timestamp()), meas[0], meas[1]))
             if not measurementConfiguration.tests:
                 time.sleep((60*measurementConfiguration.minutesToWaitBetweenMeasurements)-30)
 
